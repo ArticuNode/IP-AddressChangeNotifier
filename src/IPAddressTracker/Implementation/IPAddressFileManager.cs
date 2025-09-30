@@ -29,7 +29,16 @@ namespace IPAddressTracker.Implementation
             }
             else
             {
-                IPAddress = File.ReadAllLines(_ipAddressFile)[0];
+                try
+                {
+                    IPAddress = File.ReadAllLines(_ipAddressFile)[0];
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error($"Error loading ip address from file {_ipAddressFile}");
+                    _logger.Error(ex.ToString());
+                    IPAddress = "0.0.0.0";
+                }
             }
 
             if (!IPAddressIsValid(IPAddress))
